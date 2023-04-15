@@ -1,8 +1,11 @@
 import 'dart:convert';
 
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:plants/models/get_all_lite.dart';
+
+import 'models/plant_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,7 +17,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Plantly',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -65,23 +68,39 @@ class _MyHomePageState extends State<MyHomePage> {
                   return ListView.builder(
                       itemCount: data?.length,
                       itemBuilder: (context, index) {
-                        return ExpansionTile(
-                          title: Text(data![index].commonNameFr ?? "NA"),
-                          leading: SizedBox(
+                        return Card(
+                          child: ListTile(
+                            onTap: () {
+                              Get.to(
+                                PlantPage(plant: data[index]),
+                              );
+                            },
+                            trailing: Icon(Icons.navigate_next),
+                            title: Text(data![index].commonNameFr ?? "NA"),
+                            leading: SizedBox(
                               height: 100,
                               width: 100,
-                              child: Image.network(data[index].img ?? "NA")),
-                          subtitle: Text(data[index].climat ?? "NA"),
-                          children: [
-                            Text(data[index].categories ?? "NA"),
-                            Text(data[index].family ?? "NA"),
-                            Text(data[index].latinName ?? "NA"),
-                          ],
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        fit: BoxFit.fill,
+                                        image: NetworkImage(
+                                            data[index].img ?? "NA"))),
+                              ),
+                            ),
+                            subtitle: Text(data[index].climat ?? "NA"),
+                            // children: [
+                            //   Text(data[index].categories ?? "NA"),
+                            //   Text(data[index].family ?? "NA"),
+                            //   Text(data[index].latinName ?? "NA"),
+                            // ],
+                          ),
                         );
 
                         // UpcomingMatchTile(fixture: data![index]);
                       });
                 }
+                //TODO:Handle unavailable network
               }
               {
                 return Center(child: CircularProgressIndicator());
