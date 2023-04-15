@@ -41,7 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
   var url = Uri.https("house-plants2.p.rapidapi.com", "/all-lite");
   @override
   void initState() {
-    // TODO: implement initState
+    // TODO: load shared prefs
     super.initState();
     plants = getAllLite();
   }
