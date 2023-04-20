@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:plants/models/get_all_lite.dart';
 
+import 'config.dart';
 import 'models/plant_page.dart';
 
 void main() {
@@ -113,7 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<List<GetAllLite>> getAllLite() async {
     try {
       var response = await http.get(url, headers: {
-        'X-RapidAPI-Key': 'bcd015993dmsh69507f56e75d77cp163249jsn0c4618372e5f',
+        'X-RapidAPI-Key': apiKey,
         'X-RapidAPI-Host': 'house-plants2.p.rapidapi.com'
       });
       List<dynamic> responseList = jsonDecode(response.body);
