@@ -53,60 +53,63 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
-        child: FutureBuilder(
-            future: plants,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.hasError) {
-                  return SnackBar(
-                    content: Text(
-                      snapshot.error.toString(),
-                    ),
-                  );
-                } else if (snapshot.hasData) {
-                  final data = snapshot.data;
-                  return ListView.builder(
-                      itemCount: data?.length,
-                      itemBuilder: (context, index) {
-                        return Card(
-                          child: ListTile(
-                            onTap: () {
-                              Get.to(
-                                PlantPage(plant: data[index]),
-                              );
-                            },
-                            trailing: Icon(Icons.navigate_next),
-                            title: Text(data![index].commonNameFr ?? "NA"),
-                            leading: SizedBox(
-                              height: 100,
-                              width: 100,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                        fit: BoxFit.fill,
-                                        image: NetworkImage(
-                                            data[index].img ?? "NA"))),
+      body: RefreshIndicator(
+        onRefresh: refresh,
+        child: Center(
+          child: FutureBuilder(
+              future: plants,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasError) {
+                    return SnackBar(
+                      content: Text(
+                        snapshot.error.toString(),
+                      ),
+                    );
+                  } else if (snapshot.hasData) {
+                    final data = snapshot.data;
+                    return ListView.builder(
+                        itemCount: data?.length,
+                        itemBuilder: (context, index) {
+                          return Card(
+                            child: ListTile(
+                              onTap: () {
+                                Get.to(
+                                  PlantPage(plant: data[index]),
+                                );
+                              },
+                              trailing: Icon(Icons.navigate_next),
+                              title: Text(data![index].commonNameFr ?? "NA"),
+                              leading: SizedBox(
+                                height: 100,
+                                width: 100,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          fit: BoxFit.fill,
+                                          image: NetworkImage(
+                                              data[index].img ?? "NA"))),
+                                ),
                               ),
+                              subtitle: Text(data[index].climat ?? "NA"),
+                              // children: [
+                              //   Text(data[index].categories ?? "NA"),
+                              //   Text(data[index].family ?? "NA"),
+                              //   Text(data[index].latinName ?? "NA"),
+                              // ],
                             ),
-                            subtitle: Text(data[index].climat ?? "NA"),
-                            // children: [
-                            //   Text(data[index].categories ?? "NA"),
-                            //   Text(data[index].family ?? "NA"),
-                            //   Text(data[index].latinName ?? "NA"),
-                            // ],
-                          ),
-                        );
+                          );
 
-                        // UpcomingMatchTile(fixture: data![index]);
-                      });
+                          // UpcomingMatchTile(fixture: data![index]);
+                        });
+                  }
+                  //TODO:Handle unavailable network
                 }
-                //TODO:Handle unavailable network
-              }
-              {
-                return Center(child: CircularProgressIndicator());
-              }
-            }),
+                {
+                  return Center(child: CircularProgressIndicator());
+                }
+              }),
+        ),
       ),
     );
   }
@@ -134,5 +137,15 @@ class _MyHomePageState extends State<MyHomePage> {
       // }
     }
     return List.empty();
+  }
+
+  Future<void> refresh() async {
+    try {
+      setState(() {
+        plants = getAllLite();
+      });
+    } catch (e) {
+      rethrow;
+    }
   }
 }
