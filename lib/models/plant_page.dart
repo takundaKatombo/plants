@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:get/get.dart';
 import 'package:plants/models/get_all_lite.dart';
 
 class PlantPage extends StatefulWidget {
@@ -18,11 +19,14 @@ class _PlantPageState extends State<PlantPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        // appBar: AppBar(
-        //   foregroundColor: Colors.black,
-        //   backgroundColor: Colors.white.withOpacity(1),
-        // ),
-        body: Column(
+        appBar: AppBar(
+          // foregroundColor: Colors.black,
+          backgroundColor: Colors.black,
+          title: Text(widget.plant.family ?? "NA"),
+          leading: IconButton(
+              onPressed: () => Get.back(), icon: Icon(Icons.arrow_back)),
+        ),
+        body: Stack(
           children: [
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.5,
@@ -37,79 +41,94 @@ class _PlantPageState extends State<PlantPage> {
                         image: NetworkImage(widget.plant.img ?? "NA"))),
               ),
             ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.03,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                widget.plant.commonNameFr ?? "N/A",
-                softWrap: true,
-                style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Text(
-                "Climate : ${widget.plant.climat}",
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Text(
-                "Category : ${widget.plant.categories}",
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Text(
-                "Family : ${widget.plant.family}",
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Text(
-                "Latin Name : ${widget.plant.latinName}",
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: IconButton(
-                onPressed: () {
-                  setState(() {
-                    liked =
-                        !liked; //TODO:add ID to liked list and save to shared preferences
-                  });
-                },
-                icon: liked
-                    ? Icon(
-                        Icons.favorite,
-                        color: Colors.red,
-                        size: 30,
-                      )
-                    : Icon(
-                        Icons.favorite_outline_rounded,
-                        size: 30,
+            // SizedBox(
+            //   height: MediaQuery.of(context).size.height * 0.03,
+            // ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height * 0.35,
+                width: MediaQuery.of(context).size.width,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          widget.plant.commonNameFr ?? "N/A",
+                          softWrap: true,
+                          style: TextStyle(
+                              fontSize: 28,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1),
+                        ),
                       ),
+                      Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Text(
+                          "Climate : ${widget.plant.climat}",
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Text(
+                          "Category : ${widget.plant.categories}",
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Text(
+                          "Family : ${widget.plant.family}",
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Text(
+                          "Latin Name : ${widget.plant.latinName}",
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              liked =
+                                  !liked; //TODO:add ID to liked list and save to shared preferences
+                            });
+                          },
+                          icon: liked
+                              ? Icon(
+                                  Icons.favorite,
+                                  color: Colors.red,
+                                  size: 30,
+                                )
+                              : Icon(
+                                  Icons.favorite_outline_rounded,
+                                  size: 30,
+                                ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
           ],

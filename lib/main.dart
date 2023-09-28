@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Plantly'),
+      home: const MyHomePage(title: 'All Plants'),
     );
   }
 }
@@ -50,8 +50,26 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: BottomNavigationBar(items: [
+        BottomNavigationBarItem(icon: Icon(Icons.dehaze), label: "All"),
+        BottomNavigationBarItem(icon: Icon(Icons.favorite), label: "Fav")
+      ]),
       appBar: AppBar(
-        title: Text(widget.title),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: Text(
+          widget.title,
+          style: TextStyle(color: Colors.black),
+        ),
+        actions: [
+          Icon(
+            Icons.search,
+            color: Colors.black,
+          ),
+          SizedBox(
+            width: 20,
+          )
+        ],
       ),
       body: RefreshIndicator(
         onRefresh: refresh,
@@ -68,36 +86,42 @@ class _MyHomePageState extends State<MyHomePage> {
                     );
                   } else if (snapshot.hasData) {
                     final data = snapshot.data;
-                    return ListView.builder(
-                        itemCount: data?.length,
+                    return ListView.separated(
+                        separatorBuilder: (context, int) {
+                          return SizedBox(
+                            height: 10,
+                          );
+                        },
+                        itemCount: data!.length,
                         itemBuilder: (context, index) {
-                          return Card(
-                            child: ListTile(
-                              onTap: () {
-                                Get.to(
-                                  PlantPage(plant: data[index]),
-                                );
-                              },
-                              trailing: Icon(Icons.navigate_next),
-                              title: Text(data![index].commonNameFr ?? "NA"),
-                              leading: SizedBox(
-                                height: 100,
-                                width: 100,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                          fit: BoxFit.fill,
-                                          image: NetworkImage(
-                                              data[index].img ?? "NA"))),
-                                ),
-                              ),
-                              subtitle: Text(data[index].climat ?? "NA"),
-                              // children: [
-                              //   Text(data[index].categories ?? "NA"),
-                              //   Text(data[index].family ?? "NA"),
-                              //   Text(data[index].latinName ?? "NA"),
-                              // ],
+                          return ListTile(
+                            onTap: () {
+                              Get.to(
+                                PlantPage(plant: data[index]),
+                              );
+                            },
+                            // trailing: Icon(Icons.navigate_next),
+                            title: Text(
+                              data![index].categories ?? "NA",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 24),
                             ),
+                            leading: Container(
+                              height: 400,
+                              width: 100,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  image: DecorationImage(
+                                      fit: BoxFit.fill,
+                                      image: NetworkImage(
+                                          data[index].img ?? "NA"))),
+                            ),
+                            subtitle: Text(data[index].climat ?? "NA"),
+                            // children: [
+                            //   Text(data[index].categories ?? "NA"),
+                            //   Text(data[index].family ?? "NA"),
+                            //   Text(data[index].latinName ?? "NA"),
+                            // ],
                           );
 
                           // UpcomingMatchTile(fixture: data![index]);
